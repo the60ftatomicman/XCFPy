@@ -1,5 +1,5 @@
 from src.props.base import base
-from src.basic.gimp_unit32 import gimp_uint32
+from src.basic.gimp_uint32 import gimp_uint32
 
 class prop_mode(base):
     typecode    = 7
@@ -10,8 +10,11 @@ class prop_mode(base):
         ##
         ##
         ##
-        self.mode = gimp_uint32(fileIO).val
-        if self.mode < 0 or self.mode > 61:
-            print("Expected mode to be: [%s] or [%s] but got [%s]" % (0,1,self.mode))
+        #if prop_mode.oldMode:
+        #    self.mode = 0
+        #else:
+        self.val = gimp_uint32(fileIO).val
+        if self.val < 0 or self.val > 61:
+            print("Expected mode to be: [%s] or [%s] but got [%s]" % (0,61,self.val))
         #self.mode = VISIBILITY(self.visible) #TODO -- huuuuge enum
-        print("Mode is: [%s]"%(self.mode))
+        self.print_val()

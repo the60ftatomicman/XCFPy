@@ -1,6 +1,6 @@
+from src.basic.gimp_uint32 import gimp_uint32
 from src.props.base import base
-from src.basic.custom_enums import COLOR_TAGS
-from src.basic.gimp_unit32 import gimp_uint32
+from src.enums.unit_identifier import UNIT_IDENTIFIER
 
 class prop_unit(base):
     typecode    = 22
@@ -11,8 +11,8 @@ class prop_unit(base):
         ##
         ##
         ##
-        self.unitIdentifier = int.from_bytes(fileIO.read(4), byteorder='big')
-        if self.unitIdentifier < 1 or self.unitIdentifier > 4:
-            print("Expected unitIdentifier to be between: [%s] and [%s] but got [%s]" % (1,4,self.unitIdentifier))
-        self.unitIdentifier = COLOR_TAGS(self.unitIdentifier)
-        print("Units: [%s]"%(self.unitIdentifier))
+        self.val = gimp_uint32(fileIO).val
+        if self.val < 1 or self.val > 4:
+            print("Expected [%s] to be between: [%s] and [%s] but got [%s]" % (self.name,1,4,self.val))
+        self.val = UNIT_IDENTIFIER(self.val)
+        self.print_val()

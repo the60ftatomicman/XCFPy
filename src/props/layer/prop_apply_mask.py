@@ -1,7 +1,6 @@
 from src.props.base import base
-
-from src.basic.custom_enums import APPLY_MASK
-from src.basic.gimp_unit32 import gimp_uint32
+from src.enums.mask import MASK
+from src.basic.gimp_uint32 import gimp_uint32
 
 class prop_apply_mask(base):
     typecode    = 11
@@ -12,9 +11,9 @@ class prop_apply_mask(base):
         ##
         ##
         ##
-        self.applyMask = gimp_uint32(fileIO).val
-        if self.applyMask < 0 or self.applyMask > 1:
-            print("Expected apply mask boolean to be: [%s] or [%s] but got [%s]" % (0,1,self.applyMask))
-        self.applyMask = APPLY_MASK(self.applyMask)
-        print("Apply Mask is: [%s]"%(self.applyMask))
+        self.val = gimp_uint32(fileIO).val
+        if self.val < 0 or self.val > 1:
+            print("Expected apply mask boolean to be: [%s] or [%s] but got [%s]" % (0,1,self.val))
+        self.val = MASK(self.val)
+        self.print_val()
 

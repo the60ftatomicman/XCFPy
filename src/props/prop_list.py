@@ -1,4 +1,4 @@
-from src.props.prop            import prop
+from src.props.prop_factory import prop_factory
 
 class prop_list:
     def __init__(self, fileIO):
@@ -6,7 +6,7 @@ class prop_list:
 
         currPropType = "initial"
         while currPropType != "PROP_END" and currPropType != "undetermined":
-            currProp = prop(fileIO)
+            currProp = prop_factory(fileIO)
             if currProp.type != "undetermined":
                 self.val.append(currProp)
             currPropType = currProp.type

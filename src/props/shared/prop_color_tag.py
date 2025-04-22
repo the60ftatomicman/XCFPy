@@ -1,6 +1,6 @@
 from src.props.base import base
-from src.basic.custom_enums import COLOR_TAGS
-from src.basic.gimp_unit32 import gimp_uint32
+from src.enums.color_tags import COLOR_TAGS
+from src.basic.gimp_uint32 import gimp_uint32
 
 class prop_color_tag(base):
     typecode    = 34
@@ -11,9 +11,9 @@ class prop_color_tag(base):
         ##
         ##
         ##
-        self.tag = gimp_uint32(fileIO).val
-        if self.tag < 0 or self.tag > 8:
-            print("Expected colotar tag to be between: [%s] or [%s] but got [%s]" % (0,8,self.tag))
-        self.tag = COLOR_TAGS(self.tag)
-        print("Color Tag is: [%s]"%(self.tag))
+        self.val = gimp_uint32(fileIO).val
+        if self.val < 0 or self.val > 8:
+            print("Expected [%s] to be between: [%s] or [%s] but got [%s]" % (self.name,0,8,self.val))
+        self.val = COLOR_TAGS(self.val)
+        self.print_val()
 

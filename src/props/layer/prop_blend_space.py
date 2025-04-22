@@ -1,5 +1,5 @@
 from src.props.base import base
-from src.basic.gimp_unit32 import gimp_uint32
+from src.basic.gimp_int32 import gimp_int32
 
 class prop_blend_space(base):
     typecode    = 37
@@ -10,8 +10,7 @@ class prop_blend_space(base):
         ##
         ##
         ##
-        self.space = gimp_uint32(fileIO).val
-        if self.space < 1 or self.space > 4:
-            print("Expected space to be: [%s] or [%s] but got [%s]" % (0,1,self.space))
-        #self.mode = VISIBILITY(self.visible) #TODO -- huuuuge enum
-        print("Space is: [%s]"%(self.space))
+        self.val = gimp_int32(fileIO).val
+        if self.val < 1 or self.val > 4:
+            print("Expected [%s] to be: [%s] or [%s] but got [%s]" % (self.name,1,4,self.val))
+        self.print_val()

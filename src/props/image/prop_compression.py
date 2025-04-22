@@ -1,6 +1,5 @@
 from src.props.base import base
-from src.basic.custom_enums import COMPRESSION_INDICATOR
-from src.basic.gimp_unit32 import gimp_uint32
+from src.enums.compression_indicator import COMPRESSION_INDICATOR
 
 class prop_compression(base):
     typecode    = 17
@@ -11,8 +10,8 @@ class prop_compression(base):
         ##
         ##
         ##
-        self.compressionIndicator = int.from_bytes(fileIO.read(1), byteorder='big')
-        if self.compressionIndicator < 0 or self.compressionIndicator > 3:
-            print("Expected compressionIndicator to be between: [%s] and [%s] but got [%s]" % (0,3,self.compressionIndicator))
-        self.compressionIndicator = COMPRESSION_INDICATOR(self.compressionIndicator)
-        print("COMPRESSION [%s]"%(self.compressionIndicator))
+        self.val = int.from_bytes(fileIO.read(1), byteorder='big')
+        if self.val < 0 or self.val > 3:
+            print("Expected compressionIndicator to be between: [%s] and [%s] but got [%s]" % (0,3,self.val))
+        self.val = COMPRESSION_INDICATOR(self.val)
+        self.print_val()

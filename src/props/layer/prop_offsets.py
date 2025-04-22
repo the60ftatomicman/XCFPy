@@ -1,5 +1,5 @@
 from src.props.base import base
-from src.basic.gimp_unit32 import gimp_uint32
+from src.basic.gimp_int32 import gimp_int32
 
 class prop_offsets(base):
     typecode    = 15
@@ -10,7 +10,11 @@ class prop_offsets(base):
         ##
         ##
         ##
-        self.xOffset = gimp_uint32(fileIO).val
-        self.yOffset = gimp_uint32(fileIO).val
-        print("Offsets (x,y) are: [%s,%s]"%(self.xOffset,self.yOffset))
+        xOffset = gimp_int32(fileIO).val
+        yOffset = gimp_int32(fileIO).val
+        self.val = [xOffset,yOffset]
+        self.print_val()
+
+    def print_val(self):
+        print("[%s] are: x [%s] y [%s]"%(self.name,self.val[0],self.val[1]))
 

@@ -1,4 +1,4 @@
-from src.basic.gimp_unit32 import gimp_uint32
+from src.basic.gimp_uint32 import gimp_uint32
 
 class gimp_string:
     def __init__(self, fileIO):

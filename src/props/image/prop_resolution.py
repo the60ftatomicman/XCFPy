@@ -1,5 +1,4 @@
 from src.props.base import base
-from src.basic.gimp_unit32 import gimp_uint32
 from src.basic.gimp_float import gimp_float
 
 class prop_resolution(base):
@@ -11,6 +10,10 @@ class prop_resolution(base):
         ##
         ##
         ##
-        self.hres = gimp_float(fileIO).val
-        self.vres = gimp_float(fileIO).val
-        print("HRES [%s] VRES [%s]"%(self.hres,self.vres))
+        hres = gimp_float(fileIO).val ## TODO -- fix float
+        vres = gimp_float(fileIO).val
+        self.val = [hres,vres]
+        self.print_val()
+
+    def print_val(self):
+        print("[%s] is: HRES [%s] VRES [%s]"%(self.name,self.val[0],self.val[1]))

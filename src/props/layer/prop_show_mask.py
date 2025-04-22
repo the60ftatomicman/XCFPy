@@ -1,6 +1,6 @@
 from src.props.base import base
-from src.basic.custom_enums import VISIBILITY
-from src.basic.gimp_unit32 import gimp_uint32
+from src.enums.visibility import VISIBILITY
+from src.basic.gimp_uint32 import gimp_uint32
 
 class prop_show_mask(base):
     typecode    = 13
@@ -11,9 +11,9 @@ class prop_show_mask(base):
         ##
         ##
         ##
-        self.visibility = gimp_uint32(fileIO).val
-        if self.visibility < 0 or self.visibility > 1:
-            print("Expected show mask boolean to be: [%s] or [%s] but got [%s]" % (0,1,self.visibility))
-        self.visibility = VISIBILITY(self.visibility)
-        print("Show Mask is: [%s]"%(self.visibility))
+        self.val = gimp_uint32(fileIO).val
+        if self.val < 0 or self.val > 1:
+            print("Expected [%s] to be: [%s] or [%s] but got [%s]" % (self.name,0,1,self.val))
+        self.val = VISIBILITY(self.val)
+        self.print_val()
 
