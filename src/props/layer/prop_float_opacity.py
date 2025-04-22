@@ -1,14 +1,15 @@
-from src.basic.gimp_unit32 import gimp_uint32
+from src.props.base import base
 from src.basic.gimp_float import gimp_float
 
-class prop_float_opacity:
+class prop_float_opacity(base):
+    typecode    = 33
+    payLoadSize = 4
+    name        = "PROP_FLOAT_OPACITY"
     def __init__(self, fileIO):
-        self.type = gimp_uint32(fileIO).val
-        if self.type != 33:
-            print("Expected type: [%s] but got [%s]" % (33,self.type))
-        self.payLoadSize = gimp_uint32(fileIO).val
-        if self.payLoadSize != 4:
-            print("Expected payloadSize: [%s] but got [%s]" % (4,self.payLoadSize))
+        super().__init__(fileIO,prop_float_opacity.name,prop_float_opacity.typecode,prop_float_opacity.payLoadSize)
+        ##
+        ##
+        ##
         self.opacity = gimp_float(fileIO).val
         # TODO -- fix the odd issue with this
         #if self.opacity < 0.0 or self.opacity > 1.0:

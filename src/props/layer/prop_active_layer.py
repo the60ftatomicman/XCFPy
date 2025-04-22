@@ -1,11 +1,10 @@
-from enum import Enum
-from src.basic.gimp_unit32 import gimp_uint32
 
-class prop_active_layer:
+from src.props.base import base
+
+class prop_active_layer(base):
+    typecode    = 2
+    payLoadSize = 0
+    name        = "PROP_ACTIVE_LAYER"
     def __init__(self, fileIO):
-        self.type = gimp_uint32(fileIO).val
-        if self.type != 2:
-            print("Expected type: [%s] but got [%s]" % (2,self.type))
-        self.payLoadSize = gimp_uint32(fileIO).val
-        if self.payLoadSize != 0:
-            print("Expected payloadSize: [%s] but got [%s]" % (0,self.payLoadSize))
+        super().__init__(fileIO,prop_active_layer.name,prop_active_layer.typecode,prop_active_layer.payLoadSize)
+

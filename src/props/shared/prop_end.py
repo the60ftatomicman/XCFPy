@@ -1,11 +1,8 @@
-from enum import Enum
-from src.basic.gimp_unit32 import gimp_uint32
+from src.props.base import base
 
-class prop_end:
+class prop_end(base):
+    typecode    = 0
+    payLoadSize = 0
+    name        = "PROP_END"
     def __init__(self, fileIO):
-        self.type = gimp_uint32(fileIO).val
-        if self.type != 0:
-            print("Expected type: [%s] but got [%s]" % (0,self.type))
-        self.end_byte = gimp_uint32(fileIO).val
-        if self.end_byte != 0:
-            print("Expected a second: [%s] but got [%s]" % (0,self.end_byte))
+        super().__init__(fileIO,prop_end.name,prop_end.typecode,prop_end.payLoadSize)

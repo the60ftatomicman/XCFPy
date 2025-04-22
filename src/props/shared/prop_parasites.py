@@ -1,11 +1,15 @@
+from src.props.base import base
 from src.basic.gimp_unit32 import gimp_uint32
 from src.basic.gimp_string import gimp_string
 
-class prop_parasites:
+class prop_parasites(base):
+    typecode    = 21
+    name        = "PROP_PARASITES"
     def __init__(self, fileIO):
-        self.type = gimp_uint32(fileIO).val
-        if self.type != 21:
-            print("Expected type: [%s] but got [%s]" % (21,self.type))
+        super().__init__(fileIO,prop_parasites.name,prop_parasites.typecode,None)
+        ##
+        ##
+        ##
         self.payLoadSize = gimp_uint32(fileIO).val
         print("parasite payload size: [%s]"%self.payLoadSize)
 
