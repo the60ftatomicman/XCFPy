@@ -11,6 +11,10 @@ from src.props.layer.prop_visible       import prop_visible
 from src.props.layer.prop_lock_alpha    import prop_lock_alpha
 from src.props.layer.prop_apply_mask    import prop_apply_mask
 from src.props.layer.prop_edit_mask     import prop_edit_mask
+from src.props.layer.prop_show_mask     import prop_show_mask
+from src.props.layer.prop_offsets       import prop_offsets
+from src.props.layer.prop_mode          import prop_mode
+from src.props.layer.prop_blend_space   import prop_blend_space
 
 from src.props.shared.prop_lock_position   import prop_lock_position
 from src.props.shared.prop_tattoo          import prop_tattoo
@@ -27,16 +31,20 @@ class prop:
         b = fileIO.read(4)
         typecode = int.from_bytes(b, byteorder='big')
         fileIO.seek(-4,1)
+        
         if typecode == 0:
             self.val  = prop_end(fileIO)
             self.type = "PROP_END"
-            print("--------- END OF PROPERTIES LIST ----------")
+            print("----- END OF PROPERTIES LIST ------")
         elif typecode == 2:
             self.val  = prop_active_layer(fileIO)
             self.type = "PROP_ACTIVE_LAYER"
         elif typecode == 6:
             self.val  = prop_opacity(fileIO)
             self.type = "PROP_OPACITY"
+        elif typecode == 7:
+            self.val  = prop_mode(fileIO)
+            self.type = "PROP_MODE"
         elif typecode == 8:
             self.val  = prop_visible(fileIO)
             self.type = "PROP_VISIBLE"
@@ -49,6 +57,12 @@ class prop:
         elif typecode == 12:
             self.val  = prop_edit_mask(fileIO)
             self.type = "PROP_EDIT_MASK"
+        elif typecode == 13:
+            self.val  = prop_show_mask(fileIO)
+            self.type = "PROP_SHOW_MASK"
+        elif typecode == 15:
+            self.val  = prop_offsets(fileIO)
+            self.type = "PROP_OFFSETS"
         elif typecode == 17:
             self.val  = prop_compression(fileIO)
             self.type = "PROP_COMPRESSION"
@@ -76,8 +90,11 @@ class prop:
         elif typecode == 34:
             self.val  = prop_color_tag(fileIO)
             self.type = "PROP_COLOR_TAG"
+        elif typecode == prop_blend_space.typecode:
+            self.val  = prop_blend_space(fileIO)
+            self.type = prop_blend_space.name
         elif typecode == 42:
             self.val  = prop_lock_visibility(fileIO)
             self.type = "PROP_LOCK_VISIBILITY"
         else:
-            print("[ERROR] unknown property code [%s][%s]"%(self.val,b))
+            print("[ERROR] unknown property code [%s][%s]"%(self.val,typecode))
