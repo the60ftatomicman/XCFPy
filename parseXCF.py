@@ -1,4 +1,5 @@
 ## https://developer.gimp.org/core/standards/xcf/#xcf-file
+## https://github.com/FHPythonUtils/GimpFormats
 ## THE ISSUE YOU ARE HAVING... you need to modify your props list based soley on the things that it shows
 # ---------- Imports
 # ----- Internal Libs

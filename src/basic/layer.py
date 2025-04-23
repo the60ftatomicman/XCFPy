@@ -27,10 +27,13 @@ class layer:
         print("-- Width x Height [%s x %s] " % (self.width,self.height))
         print("-- props -- ")
         self.props  = prop_list(fileIO).val
-        
+        # Skip
+        gimp_uint32(fileIO)
         # Hierachy structure
         hierarchyPointer = gimp_pointer(fileIO).val
-        self.hierarchy   = hierarchy(fileIO,hierarchyPointer)
+        self.hierarchy = None
+        if hierarchyPointer != 0:
+            self.hierarchy = hierarchy(fileIO,hierarchyPointer)
         # Mask structure
         maskPointer        = gimp_pointer(fileIO).val
         self.mask = None #hierarchy(fileIO,hierarchyPointer)
