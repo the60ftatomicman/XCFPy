@@ -1,4 +1,5 @@
 from src.props.base import base
+from src.enums.layer_mode import LAYER_MODE
 from src.basic.gimp_uint32 import gimp_uint32
 
 class prop_mode(base):
@@ -16,5 +17,5 @@ class prop_mode(base):
         self.val = gimp_uint32(fileIO).val
         if self.val < 0 or self.val > 61:
             print("Expected mode to be: [%s] or [%s] but got [%s]" % (0,61,self.val))
-        #self.mode = VISIBILITY(self.visible) #TODO -- huuuuge enum
+        self.val = LAYER_MODE(self.val)
         self.print_val()
