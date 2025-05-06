@@ -11,8 +11,7 @@ class prop_composite_mode(base):
         ##
         ##
         self.val = gimp_uint32(fileIO).val
-        if self.val < 1 or self.val > 4:
+        # 4294967295 == negative!
+        if self.val < 1 or self.val > 4 or self.val == 4294967295:
             print("Expected [%s] to be between: [%s] and [%s] but got [%s]" % (self.name,1,4,self.val))
-        #TODO -- this is NOT pulling properly.
-        #self.space = COMPOSITE_SPACE(self.space)
         self.print_val()

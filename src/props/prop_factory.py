@@ -17,6 +17,7 @@ from src.props.layer.prop_mode            import prop_mode
 from src.props.layer.prop_blend_space     import prop_blend_space
 from src.props.layer.prop_composite_space import prop_composite_space
 from src.props.layer.prop_composite_mode  import prop_composite_mode
+from src.props.layer.prop_linked          import prop_linked
 
 from src.props.shared.prop_lock      import prop_lock_alpha,prop_lock_content,prop_lock_position,prop_lock_visibility
 from src.props.shared.prop_tattoo    import prop_tattoo
@@ -53,7 +54,8 @@ class prop_factory:
         prop_mode,
         prop_blend_space,
         prop_composite_space,
-        prop_composite_mode
+        prop_composite_mode,
+        prop_linked
     ]
 
     def __init__(self, fileIO):
