@@ -49,3 +49,7 @@ class xcf:
         # visit objects
         for layerPointer in layerPointers:
             l = layer(fileIO,layerPointer)
+            self.layers.append(l)
+        print("-----------------------------")
+        print("-----       DONE       ------")
+        print("-----------------------------")

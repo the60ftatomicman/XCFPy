@@ -35,7 +35,10 @@ class layer:
         if hierarchyPointer != 0:
             self.hierarchy = hierarchy(fileIO,hierarchyPointer)
         # Mask structure
-        maskPointer        = gimp_pointer(fileIO).val
-        self.mask = None #hierarchy(fileIO,hierarchyPointer)
-
-        print("dones")
+        #maskPointer        = gimp_pointer(fileIO).val
+        #self.mask = None #hierarchy(fileIO,hierarchyPointer)
+        #Skip mask for no, don't care for picross!
+        pointer = gimp_pointer(fileIO).val
+        while pointer != 0:
+            pointer = gimp_pointer(fileIO).val
+        print("---- End of Layer ----")

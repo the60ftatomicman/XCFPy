@@ -16,6 +16,16 @@ class hierarchy:
         print("-- BPP [%s] " % (self.bytesPerPixel))
         # Skip
         gimp_uint32(fileIO)
+        
         # Do ALL the level pointers
-        levelPointer = gimp_pointer(fileIO).val
-        levelStructure = level(fileIO,levelPointer)
+        levelPointers = []
+        self.levels   = []
+        pointer = gimp_pointer(fileIO).val
+        while pointer != 0:
+            levelPointers.append(pointer)
+            pointer = gimp_pointer(fileIO).val
+
+        currentLevel = 0
+        for levelPointer in levelPointers:
+            l = level(fileIO,levelPointer,self.bytesPerPixel)
+            currentLevel+=1

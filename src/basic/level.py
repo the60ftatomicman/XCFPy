@@ -5,7 +5,7 @@ from src.basic.gimp_uint32  import gimp_uint32
 from src.basic.tile         import tile
 
 class level:
-    def __init__(self, fileIO,byteLocation):
+    def __init__(self, fileIO,byteLocation,bpp):
         fileIO.seek(byteLocation,0) #EXACT not relative!
         print("Jumped to position: %s" % (fileIO.tell()))
         self.width     = gimp_uint32(fileIO).val
@@ -29,5 +29,5 @@ class level:
 
         currentTile = 0
         for tilePointer in tilePointers:
-            t = tile(fileIO,tilePointer,currentTile)
+            t = tile(fileIO,tilePointer,currentTile,self.width,self.height,bpp)
             currentTile+=1
