@@ -1,4 +1,7 @@
 ## https://developer.gimp.org/core/standards/xcf/#xcf-file
+## TODO ---- everytime a list results in us getting an offset thats odd,
+## try putting a single int pull since 0s usually delimit stuff as well
+##
 from src.basic.gimp_uint32     import gimp_uint32
 from src.basic.gimp_pointer    import gimp_pointer
 
@@ -27,6 +30,9 @@ class xcf:
         while pointer != 0:
             layerPointers.append(pointer)
             pointer = gimp_pointer(fileIO).val
+            # this delimits every layer 
+            # TODO this may be needed in ALL of our pointer list.....
+            gimp_uint32(fileIO)
 
         # Now do Channels
         channelPointers = []

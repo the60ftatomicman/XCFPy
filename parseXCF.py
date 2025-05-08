@@ -10,6 +10,5 @@ from src.xcf import xcf
 if __name__ == '__main__':
     dirRoot     = path.dirname(path.realpath(__file__))
     xcfFilePath = dirRoot+"/demo.xcf"
-    layerPointers=[]
     with open(xcfFilePath, "rb", buffering=0) as f:
         xcfData = xcf(f)

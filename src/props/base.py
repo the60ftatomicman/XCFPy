@@ -12,5 +12,6 @@ class base:
             if self.payLoadSize != payLoadSize:
                 print("Expected [%s] payloadSize: [%s] but got [%s]" % (self.name,payLoadSize,self.payLoadSize))
     def print_val(self):
-        print("[%s] is: [%s]"%(self.name,self.val))
+        #print("[%s] is: [%s]"%(self.name,self.val))
+        do = 1
 

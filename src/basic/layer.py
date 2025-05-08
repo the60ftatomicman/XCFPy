@@ -25,7 +25,7 @@ class layer:
         print("---- Layer [%s] ----" % (self.name))
         print("-- type [%s] " % (self.type))
         print("-- Width x Height [%s x %s] " % (self.width,self.height))
-        print("-- props -- ")
+        #print("-- props -- ")
         self.props  = prop_list(fileIO).val
         # Skip
         gimp_uint32(fileIO)

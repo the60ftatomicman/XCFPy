@@ -68,8 +68,8 @@ class prop_factory:
             if hasattr(prop_type, "typecode") and typecode == prop_type.typecode:
                 self.val = prop_type(fileIO)
                 self.type = prop_type.name
-                if typecode == prop_end.typecode:
-                    print("----- END OF PROPERTIES LIST ------")
+                #if typecode == prop_end.typecode:
+                #    print("----- END OF PROPERTIES LIST ------")
             if self.val != None:
                 break
         if self.val == None:

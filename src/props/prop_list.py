@@ -15,5 +15,5 @@ class prop_list:
             len(self.val)
         ))
         
-        for currProp in self.val:
-            print("Prop Type: [%s] " % currProp.type)
+       # for currProp in self.val:
+            #print("Prop Type: [%s] " % currProp.type)

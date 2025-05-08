@@ -16,5 +16,6 @@ class prop_offsets(base):
         self.print_val()
 
     def print_val(self):
-        print("[%s] are: x [%s] y [%s]"%(self.name,self.val[0],self.val[1]))
+        #print("[%s] are: x [%s] y [%s]"%(self.name,self.val[0],self.val[1]))
+        do = 1
 
