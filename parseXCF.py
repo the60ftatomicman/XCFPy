@@ -13,3 +13,4 @@ if __name__ == '__main__':
     with open(xcfFilePath, "rb", buffering=0) as f:
         xcfData = xcf(f)
         print(xcfData.get_pixels("Puzzle"))
+        print(xcfData.get_pixels("Color"))

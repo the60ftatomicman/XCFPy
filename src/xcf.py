@@ -29,10 +29,10 @@ class xcf:
         pointer = gimp_pointer(fileIO).val
         while pointer != 0:
             layerPointers.append(pointer)
-            pointer = gimp_pointer(fileIO).val
             # this delimits every layer 
-            # TODO this may be needed in ALL of our pointer list.....
             gimp_uint32(fileIO)
+            pointer = gimp_pointer(fileIO).val
+
 
         # Now do Channels
         channelPointers = []
