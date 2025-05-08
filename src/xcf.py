@@ -58,4 +58,12 @@ class xcf:
             self.layers.append(l)
         print("-----------------------------")
         print("-----       DONE       ------")
-        print("-----------------------------")
+        print("-----------------------------")     
+
+    def get_pixels(self,layerName):
+        pixels = []
+        layer: layer
+        for layer in self.layers:
+            if layer.name == layerName:
+                pixels = layer.get_pixels()
+        return pixels

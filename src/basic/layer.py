@@ -42,3 +42,7 @@ class layer:
         while pointer != 0:
             pointer = gimp_pointer(fileIO).val
         print("---- End of Layer ----")
+
+    def get_pixels(self):
+        return self.hierarchy.get_pixels()
+       

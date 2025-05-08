@@ -7,5 +7,6 @@ class gimp_string:
 
         self.raw = fileIO.read(length)
         self.val = self.raw.decode("utf-8")
+        self.val = self.val[:-1]
         print("Length of string is: [%s]"%(length))
 

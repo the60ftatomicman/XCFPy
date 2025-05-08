@@ -12,3 +12,4 @@ if __name__ == '__main__':
     xcfFilePath = dirRoot+"/demo.xcf"
     with open(xcfFilePath, "rb", buffering=0) as f:
         xcfData = xcf(f)
+        print(xcfData.get_pixels("Puzzle"))

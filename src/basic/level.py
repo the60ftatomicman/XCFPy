@@ -30,4 +30,12 @@ class level:
         currentTile = 0
         for tilePointer in tilePointers:
             t = tile(fileIO,tilePointer,currentTile,self.width,self.height,bpp)
+            self.tiles.append(t)
             currentTile+=1
+        
+    def get_pixels(self):
+        pixels = []
+        tile: tile
+        for tile in self.tiles:
+            pixels.append(tile.pixels)
+        return pixels

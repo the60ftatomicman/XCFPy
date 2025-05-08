@@ -28,4 +28,9 @@ class hierarchy:
         currentLevel = 0
         for levelPointer in levelPointers:
             l = level(fileIO,levelPointer,self.bytesPerPixel)
+            self.levels.append(l)
             currentLevel+=1
+
+    def get_pixels(self):
+        return self.levels[0].get_pixels()
+       
