@@ -11,7 +11,7 @@ from src.picross.picross import picross
 # ---------- Main
 if __name__ == '__main__':
     dirRoot     = path.dirname(path.realpath(__file__))
-    xcfFilePath = dirRoot+"/demo.xcf"
+    xcfFilePath = dirRoot+"/star.xcf"
     xcfData = None
     with open(xcfFilePath, "rb", buffering=0) as f:
         xcfData = xcf(f)

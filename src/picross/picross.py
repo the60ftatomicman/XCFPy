@@ -21,9 +21,8 @@ class picross:
         self.puzzleData = [puzzlePixelData[i:i + dimensions[0]] for i in range(0, len(puzzlePixelData), dimensions[0])]
         self.parsePuzzleData()
 
-        self.winData = []
-        if winPixelData != []:
-            self.winData = [winPixelData[i:i + dimensions[0]] for i in range(0, len(winPixelData), dimensions[0])]
+        self.winData = winPixelData
+        self.parseFinalData()
 
     # See _getBoardState from the JS editor
     def parsePuzzleData(self):
@@ -72,7 +71,13 @@ class picross:
                     elif len(self.json["hints"]["horizontal"][i]) == 0:
                         self.json["hints"]["horizontal"][i] = [0]
                     totalRow = 0
-
+    
+    #255,0,0;255,0,0; or R,G,B; etc etc
+    def parseFinalData(self):
+        self.json["view"]["final"] = ""
+        for i in range(len(self.winData)):
+            pixel = str.format("%s,%s,%s;"%(self.winData[i][0],self.winData[i][1],self.winData[i][2]))
+            self.json["view"]["final"] = self.json["view"]["final"]+pixel
 
     def get_blob(self):
         return json.dumps(self.json)
