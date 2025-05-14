@@ -67,3 +67,11 @@ class xcf:
             if layer.name == layerName:
                 pixels = layer.get_pixels()
         return pixels
+
+    def get_dimensions(self,layerName):
+        dimensions = [-1,-1]
+        layer: layer
+        for layer in self.layers:
+            if layer.name == layerName:
+                dimensions = [layer.width,layer.height]
+        return dimensions

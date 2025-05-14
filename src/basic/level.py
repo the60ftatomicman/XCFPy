@@ -7,7 +7,7 @@ from src.basic.tile         import tile
 class level:
     def __init__(self, fileIO,byteLocation,bpp):
         fileIO.seek(byteLocation,0) #EXACT not relative!
-        print("Jumped to position: %s" % (fileIO.tell()))
+        #print("Jumped to position: %s" % (fileIO.tell()))
         self.width     = gimp_uint32(fileIO).val
         self.height    = gimp_uint32(fileIO).val
         self.tileCount = ceil(self.width/64)*ceil(self.height/64)
@@ -34,8 +34,8 @@ class level:
             currentTile+=1
         
     def get_pixels(self):
-        pixels = []
-        tile: tile
-        for tile in self.tiles:
-            pixels.append(tile.pixels)
-        return pixels
+        #pixels = []
+        #tile: tile
+        #for tile in self.tiles:
+        #    pixels.append(tile.pixels)
+        return self.tiles[0].pixels

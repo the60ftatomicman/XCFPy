@@ -8,7 +8,7 @@ from src.basic.gimp_uint32    import gimp_uint32
 class tile:
     def __init__(self, fileIO,byteLocation,idx,width,height,bpp):
         fileIO.seek(byteLocation,0) #EXACT not relative!
-        print("Jumped to position: %s" % (fileIO.tell()))
+        #print("Jumped to position: %s" % (fileIO.tell()))
         self.index = idx
         print("---- tile [%s] ----"%(self.index))
         self.pixels = self.decode_RLE_Tile(fileIO,width,height,bpp)

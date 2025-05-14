@@ -7,7 +7,7 @@ from src.basic.level        import level
 class hierarchy:
     def __init__(self, fileIO, byteLocation):
         fileIO.seek(byteLocation,0) #EXACT not relative!
-        print("Jumped to position: %s" % (fileIO.tell()))
+        #print("Jumped to position: %s" % (fileIO.tell()))
         self.width         = gimp_uint32(fileIO).val
         self.height        = gimp_uint32(fileIO).val
         self.bytesPerPixel = gimp_uint32(fileIO).val
