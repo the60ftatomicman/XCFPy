@@ -3,6 +3,7 @@
 ## THE ISSUE YOU ARE HAVING... you need to modify your props list based soley on the things that it shows
 # ---------- Imports
 # ----- Internal Libs
+import datetime
 from os import path
 from src.xcf import xcf
 from src.picross.picross import picross
@@ -15,13 +16,6 @@ if __name__ == '__main__':
     with open(xcfFilePath, "rb", buffering=0) as f:
         xcfData = xcf(f)
     # Now to do some stuff for Picross
-    # TODO -- we only handle puzzles less than 64 pixels atm.
-    # TODO -- id like to get the library to be more generalized but curretly
-    # TODO -- I am letting perfect be the enemy of working
-
-    #print(xcfData.get_pixels("Puzzle"))
-    #print("----")
-    #print(xcfData.get_pixels("Color"))
     puzzlePixels = xcfData.get_pixels("Puzzle")
     if puzzlePixels == []:
         print("ERROR - We do not have a layer named puzzle or it could not be parsed.")
@@ -38,3 +32,21 @@ if __name__ == '__main__':
     print("---- OUTPUT ----")
     print(puzzle.get_blob())
     print("---- OUTPUT ----")
+
+    #Write a client file so I can send it to mel
+    dirRoot     = path.dirname(path.realpath(__file__))
+    clientFilePath = dirRoot+"/client_apps/client.html"
+    date_stamp = datetime.datetime.now().strftime("%m_%d_%Y")
+    outputFilePath = dirRoot+"/output/"+date_stamp+".html"
+    replaceString = "REPLACE ME"
+    clientData = None
+    try:
+        with open(clientFilePath, "r") as f:
+            clientData = f.read()
+            clientData = clientData.replace(replaceString, puzzle.get_blob())
+        with open(outputFilePath, "w") as f:
+            f.write(clientData)
+    except FileNotFoundError:
+        print("Error: File not found at: %s" % (clientFilePath))
+    except Exception as e:
+        print("An error occurred while reading client file: %s"%(e))

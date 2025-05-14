@@ -27,9 +27,7 @@ class picross:
 
     # See _getBoardState from the JS editor
     def parsePuzzleData(self):
-        #print(self.puzzleData)
         fullSize = self.json["size"]
-        #maxHints = math.floor(self.json["size"] / 2)
 
         for i in range(fullSize):
             self.json["hints"]["vertical"][i]   = []
@@ -39,8 +37,8 @@ class picross:
             totalRow=0
             
             for j in range(fullSize):
-                cellCol = self.puzzleData[i][j] # going across
-                cellRow = self.puzzleData[j][i] # going down
+                cellCol = self.puzzleData[j][i] # going across
+                cellRow = self.puzzleData[i][j] # going down
 
                 if j < fullSize-1:
                     #----- Columns
