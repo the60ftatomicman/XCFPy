@@ -2,8 +2,7 @@
 from src.props.image.prop_compression import prop_compression
 from src.props.image.prop_resolution  import prop_resolution
 from src.props.image.prop_unit        import prop_unit
-
-
+from src.props.image.prop_guides      import prop_guides
 
 from src.props.layer.prop_active_layer    import prop_active_layer
 from src.props.layer.prop_opacity         import prop_opacity
@@ -26,6 +25,7 @@ from src.props.shared.prop_parasites import prop_parasites
 from src.props.shared.prop_color_tag import prop_color_tag
 
 
+
 class prop_factory:
 
     assignable_properties = [
@@ -41,6 +41,7 @@ class prop_factory:
         prop_compression,
         prop_resolution,
         prop_unit,
+        prop_guides,
         # Layer properties
         prop_active_layer,
         prop_opacity,
