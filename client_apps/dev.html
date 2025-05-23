@@ -56,6 +56,11 @@
             .exclude{
                 fill:rgb(200, 200, 200);
             }
+            .exclude_symbol{
+                fill:none;
+                stroke:black;
+                stroke-width:3
+            }
             .gridlines{
                 stroke:rgb(0,0,255);
                 stroke-width: 3px;
@@ -72,6 +77,9 @@
                 .pencil_body        {fill: rgb(255,255,0);}
                 .pencil_eraser      {fill: #ff78f4;}
                 .pencil_eraser_metal{fill: #818181;}
+            }
+            .hidden{
+                display:none;
             }
         </style>
         <g class="hints">
@@ -106,7 +114,7 @@ CLASSNAMES={
     FILLED: "filled",
     IGNORE: "exclude"
 }
-DATA = {"name": "Graceful", "size": 15, "divider": 3, "hints": {"vertical": [[15], [6, 8], [6, 8], [2, 3, 8], [2, 1, 1, 8], [2, 2, 8], [2, 2, 8], [2, 2, 7], [1, 1], [5], [2, 10], [3, 11], [3, 11], [2, 12], [15]], "horizontal": [[8, 4], [9, 4], [3, 3, 1], [8, 1, 2], [4, 3, 4], [5, 5], [1, 5], [7, 5], [8, 5], [8, 5], [8, 6], [8, 6], [8, 6], [8, 6], [15]]}, "view": {"baseSize": 50, "final": "0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;199,131,79;199,131,79;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;199,131,79;199,131,79;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;199,131,79;199,131,79;199,131,79;199,131,79;199,131,79;199,131,79;255,255,255;0,0,0;0,0,0;0,0,0;176,110,60;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;255,255,255;0,0,0;0,0,0;176,110,60;176,110,60;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;255,255,255;0,0,0;176,110,60;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;199,131,79;199,131,79;199,131,79;176,110,60;176,110,60;184,184,184;0,0,0;0,0,0;184,184,184;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;184,184,184;0,0,0;184,184,184;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;184,184,184;184,184,184;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;176,110,60;184,184,184;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;176,110,60;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;199,131,79;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;199,131,79;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;199,131,79;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;"}};
+DATA = {"name": "test", "size": 10, "divider": 2, "hints": {"vertical": [[1], [2], [7], [7], [8], [8], [7], [7], [2], [1]], "horizontal": [[2], [2], [4], [6], [10], [8], [6], [6], [2, 2], [1, 1]]}, "view": {"baseSize": 50, "final": "0,0,0;0,0,0;0,0,0;0,0,0;255,244,0;255,244,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;255,244,0;255,244,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;255,244,0;255,244,0;255,244,0;255,244,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;255,244,0;255,244,0;255,244,0;255,244,0;255,244,0;255,244,0;0,0,0;0,0,0;255,244,0;255,244,0;255,244,0;0,0,0;255,244,0;255,244,0;0,0,0;255,244,0;255,244,0;255,244,0;0,0,0;255,244,0;255,244,0;0,0,0;255,244,0;255,244,0;0,0,0;255,244,0;255,244,0;0,0,0;0,0,0;0,0,0;255,244,0;255,244,0;255,244,0;255,244,0;255,244,0;255,244,0;0,0,0;0,0,0;0,0,0;0,0,0;255,244,0;255,244,0;255,244,0;255,244,0;255,244,0;255,244,0;0,0,0;0,0,0;0,0,0;0,0,0;255,244,0;255,244,0;0,0,0;0,0,0;255,244,0;255,244,0;0,0,0;0,0,0;0,0,0;0,0,0;255,244,0;0,0,0;0,0,0;0,0,0;0,0,0;255,244,0;0,0,0;0,0,0;"}};
 ACTION = false;
 CURRENT_ACTION = CLASSNAMES.FILLED;
 document.addEventListener('contextmenu', event => event.preventDefault());
@@ -223,33 +231,30 @@ function generateCells(){
             let x = c*DATA["view"]["baseSize"]+_getCornerOffset();
             let y = r*DATA["view"]["baseSize"]+_getCornerOffset();
             let newGroup =  document.createElementNS("http://www.w3.org/2000/svg", 'g');
-            newGroup.setAttribute('x'             ,x);
-            newGroup.setAttribute('y'             ,y);
+            newGroup.setAttribute('transform','translate('+x+','+y+')');
             let newCell = document.createElementNS("http://www.w3.org/2000/svg"  , 'rect');
             newCell.setAttribute('class'         ,'cell');
-            newCell.setAttribute('x'             ,x);
-            newCell.setAttribute('y'             ,y);
+            //newCell.setAttribute('x'             ,x);
+            //newCell.setAttribute('y'             ,y);
+            newCell.setAttribute('x'             ,0);
+            newCell.setAttribute('y'             ,0);
             newCell.setAttribute('width'         ,DATA["view"]["baseSize"]);
             newCell.setAttribute('height'        ,DATA["view"]["baseSize"]);
             newCell.setAttribute('pointer-events','visiblePainted');
-            
-            /*
-            let newErrorSymbol = document.createElementNS("http://www.w3.org/2000/svg", 'path');
-            newErrorSymbol.setAttribute('class','error');
-            newErrorSymbol.setAttribute('x'             ,x);
-            newErrorSymbol.setAttribute('y'             ,y);
-            newErrorSymbol.setAttribute('d',
-                'm 0 0 '+
-                'l '+DATA["view"]["baseSize"]+' '+DATA["view"]["baseSize"]+' '+
-                'm '+DATA["view"]["baseSize"]+' 0 '+
-                'l -'+DATA["view"]["baseSize"]+' '+DATA["view"]["baseSize"]+' '+
+
+            let newExcludeSymbol = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+            let symbolMin = 10
+            let symbolOffset = DATA["view"]["baseSize"] - symbolMin;
+            newExcludeSymbol.setAttribute('class','exclude_symbol hidden');
+            newExcludeSymbol.setAttribute('d',
+                'M '+symbolMin+' '+symbolMin+' '+
+                'L '+symbolOffset+' '+symbolOffset+' '+
+                'M '+symbolOffset+' '+symbolMin+' '+
+                'L '+symbolMin+' '+symbolOffset+' '+
                 'Z'
             );
-            newErrorSymbol.setAttribute('style',"fill:none;stroke:red;stroke-width:3");
-            newGroup.append(newErrorSymbol);
             newGroup.append(newCell);
-            */
-            newGroup.append(newCell);
+            newGroup.append(newExcludeSymbol);
             $('.cells').append(newGroup);
             //TODO -- add in the exclude svg icon. we'll just front load them all and turn
             // it on and off on click. easy. Peasy.
@@ -386,9 +391,22 @@ function _addEventsToCells(){
     });
     $(".cell").toArray().forEach(function(svgCell){
         svgCell.onmouseenter = (e)=>{
-            let x = e.target.attributes.x.value;
-            let y = e.target.attributes.y.value;
+            let coords = e.target.parentElement.attributes.transform.textContent
+            .replace('translate(','')
+            .replace(')','')
+            .split(',');
+            let x = coords[0];
+            let y = coords[1];
+            //let x = e.target.attributes.x.value;
+            //let y = e.target.attributes.y.value;
             $('#hover').attr('transform','translate('+x+' '+y+')');
+            if(ACTION){
+                if(CURRENT_ACTION == CLASSNAMES.IGNORE){
+                    $(e.target.parentElement).find('.exclude_symbol').removeClass('hidden');
+                }else{
+                    $(e.target.parentElement).find('.exclude_symbol').addClass('hidden');
+                }
+            }
             _cellAction(e);
         }
         svgCell.onmouseleave = (e)=>{
@@ -400,11 +418,13 @@ function _addEventsToCells(){
                 case 1:{
                     // Left Click
                     CURRENT_ACTION = CLASSNAMES.FILLED;
+                    $(e.target.parentElement).find('.exclude_symbol').addClass('hidden');
                 }
                 break;
                 case 2:{
                     // Middle Mouse Click
                     CURRENT_ACTION = CLASSNAMES.IGNORE;
+                    $(e.target.parentElement).find('.exclude_symbol').removeClass('hidden');
                 }
                 break;
                 case 3:{
@@ -412,8 +432,10 @@ function _addEventsToCells(){
                     currentClasses = e.toElement.className.baseVal;
                     if(currentClasses.indexOf(CLASSNAMES.FILLED) > -1 || currentClasses.indexOf(CLASSNAMES.IGNORE) > -1){
                         CURRENT_ACTION = CLASSNAMES.EMPTY;
+                        $(e.target.parentElement).find('.exclude_symbol').addClass('hidden');
                     }else{
                         CURRENT_ACTION = CLASSNAMES.IGNORE;
+                        $(e.target.parentElement).find('.exclude_symbol').removeClass('hidden');
                     }
                 }
                 break;
