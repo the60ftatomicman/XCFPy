@@ -106,7 +106,7 @@ CLASSNAMES={
     FILLED: "filled",
     IGNORE: "exclude"
 }
-DATA = REPLACE ME;
+DATA = {"name": "Graceful", "size": 15, "divider": 3, "hints": {"vertical": [[15], [6, 8], [6, 8], [2, 3, 8], [2, 1, 1, 8], [2, 2, 8], [2, 2, 8], [2, 2, 7], [1, 1], [5], [2, 10], [3, 11], [3, 11], [2, 12], [15]], "horizontal": [[8, 4], [9, 4], [3, 3, 1], [8, 1, 2], [4, 3, 4], [5, 5], [1, 5], [7, 5], [8, 5], [8, 5], [8, 6], [8, 6], [8, 6], [8, 6], [15]]}, "view": {"baseSize": 50, "final": "0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;199,131,79;199,131,79;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;199,131,79;199,131,79;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;199,131,79;199,131,79;199,131,79;199,131,79;199,131,79;199,131,79;255,255,255;0,0,0;0,0,0;0,0,0;176,110,60;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;255,255,255;0,0,0;0,0,0;176,110,60;176,110,60;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;255,255,255;0,0,0;176,110,60;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;199,131,79;199,131,79;199,131,79;176,110,60;176,110,60;184,184,184;0,0,0;0,0,0;184,184,184;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;184,184,184;0,0,0;184,184,184;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;184,184,184;184,184,184;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;176,110,60;184,184,184;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;176,110,60;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;199,131,79;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;199,131,79;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;199,131,79;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;"}};
 ACTION = false;
 CURRENT_ACTION = CLASSNAMES.FILLED;
 document.addEventListener('contextmenu', event => event.preventDefault());
@@ -222,18 +222,40 @@ function generateCells(){
         for(let c=0;c<DATA.size;c++){
             let x = c*DATA["view"]["baseSize"]+_getCornerOffset();
             let y = r*DATA["view"]["baseSize"]+_getCornerOffset();
-            let newCell = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+            let newGroup =  document.createElementNS("http://www.w3.org/2000/svg", 'g');
+            newGroup.setAttribute('x'             ,x);
+            newGroup.setAttribute('y'             ,y);
+            let newCell = document.createElementNS("http://www.w3.org/2000/svg"  , 'rect');
             newCell.setAttribute('class'         ,'cell');
             newCell.setAttribute('x'             ,x);
             newCell.setAttribute('y'             ,y);
             newCell.setAttribute('width'         ,DATA["view"]["baseSize"]);
             newCell.setAttribute('height'        ,DATA["view"]["baseSize"]);
             newCell.setAttribute('pointer-events','visiblePainted');
-            $('.cells').append(newCell);
+            
+            /*
+            let newErrorSymbol = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+            newErrorSymbol.setAttribute('class','error');
+            newErrorSymbol.setAttribute('x'             ,x);
+            newErrorSymbol.setAttribute('y'             ,y);
+            newErrorSymbol.setAttribute('d',
+                'm 0 0 '+
+                'l '+DATA["view"]["baseSize"]+' '+DATA["view"]["baseSize"]+' '+
+                'm '+DATA["view"]["baseSize"]+' 0 '+
+                'l -'+DATA["view"]["baseSize"]+' '+DATA["view"]["baseSize"]+' '+
+                'Z'
+            );
+            newErrorSymbol.setAttribute('style',"fill:none;stroke:red;stroke-width:3");
+            newGroup.append(newErrorSymbol);
+            newGroup.append(newCell);
+            */
+            newGroup.append(newCell);
+            $('.cells').append(newGroup);
+            //TODO -- add in the exclude svg icon. we'll just front load them all and turn
+            // it on and off on click. easy. Peasy.
         }
     }
     _addEventsToCells();
- 
 }
 function generateGuideLines(){
     let divider    = parseInt(DATA.divider) || 2;

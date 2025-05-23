@@ -7,15 +7,12 @@
     body{
         background-color: #ffffff;
     }
+    #table{user-select: none;}
     .upperSection{
         display:inline-block;
-        text-align: center;
-        width: 100%;
     }
     #table{
-        display:flex;
-        user-select: none;
-        width: 100%;
+        display:flex
     }
 </STYLE>
 </HEAD>
@@ -23,8 +20,15 @@
     <div>
         <div class="upperSection">
             <h1 id="title"></h1>
-            <p id="instructions"><b>Left click</b> fills a square.</p>
-            <p><b>Right click</b> will toggle between empty-ing a square or marking it "as do not fill"</p>
+            <input type="radio" id="fill" name="action" value="fill" checked="true"/>
+            <label for="fill">Fill (press A or left click)</label><br>
+            <input type="radio" id="remove" name="action" value="remove"/>
+            <label for="remove">Remove (press S or right click)</label><br>
+            <input type="radio" id="placeholder" name="action" value="placeholder">
+            <label for="placeholder">Placeholder (press D or click mouse wheel)</label><br>
+            <label>...or Toggle with W</label><br>
+        </div>
+        <div class="upperSection">
         </div>
     </div>
     <div>
@@ -54,7 +58,7 @@
                 fill:rgb(14, 107, 37);
             }
             .exclude{
-                fill:rgb(200, 200, 200);
+                fill:rgb(52, 61, 54);
             }
             .gridlines{
                 stroke:rgb(0,0,255);
@@ -106,9 +110,31 @@ CLASSNAMES={
     FILLED: "filled",
     IGNORE: "exclude"
 }
-DATA = REPLACE ME;
+DATA = /*REPLACE ME*/;
 ACTION = false;
 CURRENT_ACTION = CLASSNAMES.FILLED;
+$(document).on("keyup", function(e) {
+    if(e.originalEvent.key == 'a'){
+        $('#fill').prop('checked', true);
+    }
+    if(e.originalEvent.key == 'd'){
+        $('#placeholder').prop('checked', true);
+    }
+    if(e.originalEvent.key == 's'){
+        $('#remove').prop('checked', true);
+    }
+    if(e.originalEvent.key == 'w'){
+        if($('#fill').prop('checked')){
+            $('#remove').prop('checked', true);
+        }else if ($('#remove').prop('checked')){
+            $('#placeholder').prop('checked', true);
+        }else if ($('#placeholder').prop('checked')) {
+            $('#fill').prop('checked', true);
+        }else{
+            $('#fill').prop('checked', true);
+        }
+    }
+});
 document.addEventListener('contextmenu', event => event.preventDefault());
 $(document).ready(()=>{
     _reset();
@@ -373,30 +399,35 @@ function _addEventsToCells(){
             $('#hover').attr('transform','translate(-'+DATA["view"]["baseSize"]+' -'+DATA["view"]["baseSize"]+')');
         }
         svgCell.onmousedown = (e)=>{
-            
             switch (event.which) {
                 case 1:{
-                    // Left Click
-                    CURRENT_ACTION = CLASSNAMES.FILLED;
+                    //Determine Primary Action
+                    if($('input[name=action]:checked').val() == "fill"){
+                        CURRENT_ACTION = CLASSNAMES.FILLED;
+                    }else if($('input[name=action]:checked').val() == "placeholder"){
+                        CURRENT_ACTION = CLASSNAMES.IGNORE;
+                    }else if($('input[name=action]:checked').val() == "remove"){
+                        CURRENT_ACTION = CLASSNAMES.EMPTY;
+                    }
                 }
                 break;
                 case 2:{
-                    // Middle Mouse Click
                     CURRENT_ACTION = CLASSNAMES.IGNORE;
                 }
                 break;
                 case 3:{
-                    // Right click
-                    currentClasses = e.toElement.className.baseVal;
-                    if(currentClasses.indexOf(CLASSNAMES.FILLED) > -1 || currentClasses.indexOf(CLASSNAMES.IGNORE) > -1){
-                        CURRENT_ACTION = CLASSNAMES.EMPTY;
-                    }else{
-                        CURRENT_ACTION = CLASSNAMES.IGNORE;
-                    }
+                    CURRENT_ACTION = CLASSNAMES.EMPTY;
                 }
                 break;
                 default:{
-                    CURRENT_ACTION = CLASSNAMES.FILLED;
+                    //Determine Primary Action
+                    if($('input[name=action]:checked').val() == "fill"){
+                        CURRENT_ACTION = CLASSNAMES.FILLED;
+                    }else if($('input[name=action]:checked').val() == "placeholder"){
+                        CURRENT_ACTION = CLASSNAMES.IGNORE;
+                    }else if($('input[name=action]:checked').val() == "remove"){
+                        CURRENT_ACTION = CLASSNAMES.EMPTY;
+                    }
                 }
             }
             ACTION = true;

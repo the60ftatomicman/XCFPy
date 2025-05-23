@@ -2,33 +2,41 @@
 <HTML>
 <HEAD>
 <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
-<TITLE></TITLE>
+<TITLE>!!NAMEHERE!!</TITLE>
 <STYLE>
-    body{
-        background-color: #ffffff;
-    }
+	body{
+		background-color: #ffffff;
+	}
+    #table{user-select: none;}
     .upperSection{
         display:inline-block;
-        text-align: center;
-        width: 100%;
     }
-    #table{
-        display:flex;
-        user-select: none;
-        width: 100%;
+    #output{
+        height: 200px;
+        width: 200px;
     }
 </STYLE>
 </HEAD>
 <BODY>
     <div>
         <div class="upperSection">
-            <h1 id="title"></h1>
-            <p id="instructions"><b>Left click</b> fills a square.</p>
-            <p><b>Right click</b> will toggle between empty-ing a square or marking it "as do not fill"</p>
+            <h1 id="title">Editor!</h1>
+            <input type="radio" id="fill" name="action" value="fill" checked="true"/>
+            <label for="fill">Fill (press A or left click)</label><br>
+            <input type="radio" id="remove" name="action" value="remove"/>
+            <label for="remove">Remove (press S or right click)</label><br>
+            <label>...or Toggle with W</label><br>
+            <input type="number" id="cellCount" value="10"/>
+            <label for="number">Cell Count</label><br>
+            <input type="number" id="divideBy" value="2"/>
+            <label for="number">Divide By</label><br>
+        </div>
+        <div class="upperSection">
+            <h1 >Raw JSON</h1>
+            <textarea id="output"></textarea>
         </div>
     </div>
-    <div>
-    <svg id="table" xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 200 200" fill="white" stroke="black">
+    <svg id="table" xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 200 200" fill="white" stroke="black">
         <style>
             .corner{
                 fill:rgb(255, 255,255);
@@ -54,7 +62,7 @@
                 fill:rgb(14, 107, 37);
             }
             .exclude{
-                fill:rgb(200, 200, 200);
+                fill:rgb(52, 61, 54);
             }
             .gridlines{
                 stroke:rgb(0,0,255);
@@ -91,8 +99,7 @@
                 <rect class="pencil_eraser"       x="62" y="20" width="5"  height="10"/>
             </g>
         </g>
-        </svg>
-    </div>
+    </svg>
 </BODY>
 <SCRIPT>
 //---------------------------------------
@@ -106,9 +113,44 @@ CLASSNAMES={
     FILLED: "filled",
     IGNORE: "exclude"
 }
-DATA = REPLACE ME;
+DATA = {
+    "name"   : "Ticondaroga",
+    "size"   : 10,
+    "divider": 2,
+    "hints":{
+        "vertical":[[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]],
+        "horizontal":[[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]]
+    },
+    "view":{
+        "baseSize": 50,
+        "final":""
+    }
+};
+
 ACTION = false;
 CURRENT_ACTION = CLASSNAMES.FILLED;
+// ----------
+//
+//
+//
+// ----------
+$(document).on("keyup", function(e) {
+    if(e.originalEvent.key == 'a'){
+        $('#fill').prop('checked', true);
+    }
+    if(e.originalEvent.key == 's'){
+        $('#remove').prop('checked', true);
+    }
+    if(e.originalEvent.key == 'w'){
+        if($('#fill').prop('checked')){
+            $('#remove').prop('checked', true);
+        }else if ($('#remove').prop('checked')){
+            $('#fill').prop('checked', true);
+        }else{
+            $('#fill').prop('checked', true);
+        }
+    }
+});
 document.addEventListener('contextmenu', event => event.preventDefault());
 $(document).ready(()=>{
     _reset();
@@ -140,7 +182,7 @@ function generateHover(){
     let hoverCellSize = DATA["view"]["baseSize"]; //TODO we gunna make this variable
     hoverCell.setAttribute('width'  ,hoverCellSize);
     hoverCell.setAttribute('height' ,hoverCellSize);
-   
+    
     // transform the HOVER cell group. we use this to highlight where we are.
     let hoverGroup     = $("#hover")[0];
     hoverGroup.setAttribute('transform','translate(-'+hoverCellSize+' -'+hoverCellSize+')');
@@ -154,6 +196,12 @@ function generateTable(){
     table.setAttribute('viewBox'  ,'0 0 '+tableSize+' '+tableSize);
 }
 function generateHints(){
+    // IF EDITOR
+    DATA["hints"] = {
+        "vertical"  : new Array(DATA.size).fill(new Array(1).fill(0)),
+        "horizontal": new Array(DATA.size).fill(new Array(1).fill(0))
+    };
+    DATA["hints"]
     let maxHints   = Math.floor(DATA.size/2);
     let newCorner = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
     newCorner.setAttribute('x'             ,0);
@@ -170,19 +218,19 @@ function generateHints(){
             // This builds from farthest away to closest.
             let offsetHintContainer = h*DATA["view"]["baseSize"]+_getCornerOffset();
             let offsetHintIndex     = (maxHints-i-1)*DATA["view"]["baseSize"];
- 
+
             let newHintColumn = document.createElementNS("http://www.w3.org/2000/svg",'g');
             newHintColumn.setAttribute('id'            ,'hint_c_'+h+'_i_'+i);
             newHintColumn.setAttribute('class'         ,'hint');
             newHintColumn.setAttribute('transform'     ,'translate('+offsetHintContainer+' '+offsetHintIndex+')');
             newHintColumn.setAttribute('pointer-events','visiblePainted');
- 
+
             let newHintRow  = document.createElementNS("http://www.w3.org/2000/svg",'g');
             newHintRow.setAttribute('id'            ,'hint_r_'+h+'_i_'+i);
             newHintRow.setAttribute('class'         ,'hint');
             newHintRow.setAttribute('transform'     ,'translate('+offsetHintIndex+' '+offsetHintContainer+')');
             newHintRow.setAttribute('pointer-events','visiblePainted');
- 
+
             let newHintBoundry = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
             newHintBoundry.setAttribute('x'      ,'0');
             newHintBoundry.setAttribute('y'      ,'0');
@@ -190,7 +238,7 @@ function generateHints(){
             newHintBoundry.setAttribute('height' ,DATA["view"]["baseSize"]);
             newHintColumn.append(newHintBoundry);
             newHintRow.append(newHintBoundry.cloneNode());
-           
+            
             let newHintText = document.createElementNS("http://www.w3.org/2000/svg", 'text');
             newHintText.setAttribute('x'                ,Math.floor(DATA["view"]["baseSize"]/2));
             newHintText.setAttribute('y'                ,Math.floor(DATA["view"]["baseSize"]/2));
@@ -198,19 +246,17 @@ function generateHints(){
             newHintText.setAttribute('text-anchor'      ,"middle");
             newHintText.textContent=" ";
             let rowText = newHintText.cloneNode();
- 
+
             if(i < DATA["hints"]["vertical"][h].length){
-                let idx = DATA["hints"]["vertical"][h].length - 1 - i;
-                newHintText.textContent=DATA["hints"]["vertical"][h][idx];
+                newHintText.textContent=DATA["hints"]["vertical"][h][i];
             }
             newHintColumn.append(newHintText);
- 
+
             if(i < DATA["hints"]["horizontal"][h].length){
-                let idx = DATA["hints"]["horizontal"][h].length - 1 - i;
-                rowText.textContent=DATA["hints"]["horizontal"][h][idx];
+                rowText.textContent=DATA["hints"]["horizontal"][h][i];
             }
             newHintRow.append(rowText);
-           
+            
             $('.columns').append(newHintColumn);
             $('.rows').append(newHintRow);
         }
@@ -233,12 +279,12 @@ function generateCells(){
         }
     }
     _addEventsToCells();
- 
+
 }
 function generateGuideLines(){
     let divider    = parseInt(DATA.divider) || 2;
     let divideIncs = Math.floor(DATA.size/divider);
- 
+
     for(let i=divideIncs;i<DATA.size;i+=divideIncs){
         let offset = i*DATA["view"]["baseSize"]+_getCornerOffset();
         let newLineHorizontal = document.createElementNS("http://www.w3.org/2000/svg", 'line');
@@ -268,65 +314,51 @@ function generatePuzzle(){
             hintCol.text(" ");
             hintRow.text(" ");
             if(i < boardState["vertical"][h].length){
-                hintCol.text(boardState["vertical"][h][i]);
+                let idx = boardState["vertical"][h].length - 1 - i;
+                hintCol.text(boardState["vertical"][h][idx]);
             }
             if(i < boardState["horizontal"][h].length){
-                hintRow.text(boardState["horizontal"][h][i]);
+                let idx = boardState["horizontal"][h].length - 1 - i;
+                hintRow.text(boardState["horizontal"][h][idx]);
             }
-           
+            
         }
     }
+    _setRawJSON();
 }
 // ----------
 function updateHints(){
     let boardState = _getBoardState();
     //console.log(boardState);
-    let maxHints = Math.floor(DATA.size/2);
+    let maxHints   = Math.floor(DATA.size/2);
     for(let h=0;h<DATA.size;h++){
-        let hintColIdx = -1;
-        let hintRowIdx = -1;
-        for(let i=maxHints-1;i>=0;i--){
-            let colElm = $('#hint_c_'+h+'_i_'+i);
-            let rowElm = $('#hint_r_'+h+'_i_'+i);
-            let hintCol = colElm.find('text').text();
-            let hintRow = rowElm.find('text').text();
-            if(hintCol.trim() !== ''){
-                hintColIdx++; // increment
-                if(hintColIdx<boardState['vertical'][h].length){
-                    let actualVal = boardState['vertical'][h][hintColIdx];
-                    if(actualVal == hintCol){
-                        colElm.addClass('hints_marked');
-                    }else if(colElm.hasClass('hints_marked')){
-                        colElm.removeClass('hints_marked');
-                    }
+        //console.log('----- Checking Hint Group '+h+" ------");
+        validationData["vertical"][h]   = new Array(1).fill(0);
+        validationData["horizontal"][h] = new Array(1).fill(0);
+        for(let i=0;i<maxHints;i++){
+            let hintCol =$('#hint_c_'+h+'_i_'+i).find('text').text();
+            let hintRow =$('#hint_r_'+h+'_i_'+i).find('text').text();
+            //console.log(i+": "+hintCol);
+            if(hintCol.trim() != ""){
+                if(i < validationData["vertical"][h].length){
+                    validationData["vertical"][h][i] = parseInt(hintCol);
+                }else{
+                    validationData["vertical"][h].push(parseInt(hintCol));
                 }
             }
-            if(hintRow.trim() !== ''){
-                hintRowIdx++; // increment
-                if(hintRowIdx<boardState['horizontal'][h].length){
-                    let actualVal = boardState['horizontal'][h][hintRowIdx];
-                    if(actualVal == hintCol){
-                        rowElm.addClass('hints_marked');
-                    }else if(rowElm.hasClass('hints_marked')){
-                        rowElm.removeClass('hints_marked');
-                    }
+            if(hintRow.trim() != ""){
+                if(i < validationData["horizontal"][h].length){
+                    validationData["horizontal"][h][i] = parseInt(hintRow);
+                }else{
+                    validationData["horizontal"][h].push(parseInt(hintRow));
                 }
             }
         }
     }
 }
 function validateWin(){
-    //updateHints();
     let board_state = _getBoardState();
     if(JSON.stringify(board_state) === JSON.stringify(DATA["hints"])){
-        if(DATA['view']['final']) {
-        $('.gridlines').empty();
-        let colors = DATA['view']['final'].split(';');
-        $(".cells").find('rect').each((idx,rect)=>{
-            rect.setAttribute('style','fill: rgb('+colors[idx]+')');
-        });
-       
-        }
         alert('You Won!');
     }
 }
@@ -335,10 +367,10 @@ function validateWin(){
 //
 //
 // ----------
-function _setNames(){
-    let name =  DATA["name"] || 'unset';
-    document.title = name;
-    $("#title").text(name);
+function _setRawJSON(){
+    let board_state = _getBoardState();
+    DATA["hints"] = board_state;
+    $("#output").text(JSON.stringify(DATA));
 }
 function _getCornerOffset(){
     let maxHints   = Math.floor(DATA.size/2);
@@ -358,7 +390,8 @@ function _cellAction(e){
 function _addEventsToCells(){
     $(".cells").mouseleave(()=>{
         if(ACTION){
-            validateWin();
+            //validateWin();
+            generatePuzzle();
             ACTION=false;
         }
     });
@@ -373,30 +406,35 @@ function _addEventsToCells(){
             $('#hover').attr('transform','translate(-'+DATA["view"]["baseSize"]+' -'+DATA["view"]["baseSize"]+')');
         }
         svgCell.onmousedown = (e)=>{
-            
             switch (event.which) {
                 case 1:{
-                    // Left Click
-                    CURRENT_ACTION = CLASSNAMES.FILLED;
+                    //Determine Primary Action
+                    if($('input[name=action]:checked').val() == "fill"){
+                        CURRENT_ACTION = CLASSNAMES.FILLED;
+                    }else if($('input[name=action]:checked').val() == "placeholder"){
+                        CURRENT_ACTION = CLASSNAMES.IGNORE;
+                    }else if($('input[name=action]:checked').val() == "remove"){
+                        CURRENT_ACTION = CLASSNAMES.EMPTY;
+                    }
                 }
                 break;
                 case 2:{
-                    // Middle Mouse Click
                     CURRENT_ACTION = CLASSNAMES.IGNORE;
                 }
                 break;
                 case 3:{
-                    // Right click
-                    currentClasses = e.toElement.className.baseVal;
-                    if(currentClasses.indexOf(CLASSNAMES.FILLED) > -1 || currentClasses.indexOf(CLASSNAMES.IGNORE) > -1){
-                        CURRENT_ACTION = CLASSNAMES.EMPTY;
-                    }else{
-                        CURRENT_ACTION = CLASSNAMES.IGNORE;
-                    }
+                    CURRENT_ACTION = CLASSNAMES.EMPTY;
                 }
                 break;
                 default:{
-                    CURRENT_ACTION = CLASSNAMES.FILLED;
+                    //Determine Primary Action
+                    if($('input[name=action]:checked').val() == "fill"){
+                        CURRENT_ACTION = CLASSNAMES.FILLED;
+                    }else if($('input[name=action]:checked').val() == "placeholder"){
+                        CURRENT_ACTION = CLASSNAMES.IGNORE;
+                    }else if($('input[name=action]:checked').val() == "remove"){
+                        CURRENT_ACTION = CLASSNAMES.EMPTY;
+                    }
                 }
             }
             ACTION = true;
@@ -404,12 +442,8 @@ function _addEventsToCells(){
         }
         svgCell.onmouseup = (e)=>{
             ACTION = false;
-            validateWin();
-        }
-    });
-    $(".hint").toArray().forEach(function(svgHint){
-        svgHint.onclick = (e)=>{
-            $(e.target.parentElement).toggleClass("hints_marked");
+            //validateWin();
+            generatePuzzle();
         }
     });
 }
@@ -428,21 +462,21 @@ function _getBoardState(){
         for(let j=0;j<DATA.size;j++){
             let cellCol = i+(j*DATA.size);
             let cellRow = j+(i*DATA.size);
-           
+            
             if(cells[cellCol].className.baseVal.indexOf(CLASSNAMES.FILLED) > -1){
                 totalCol++;
             }else if(totalCol > 0){
                 actualBoardData["vertical"][i].push(totalCol);
                 totalCol=0;
             }
- 
+
             if(cells[cellRow].className.baseVal.indexOf(CLASSNAMES.FILLED) > -1){
                 totalRow++;
             }else if(totalRow > 0){
                 actualBoardData["horizontal"][i].push(totalRow);
                 totalRow=0;
             }
- 
+
             if(j==DATA.size-1){
                 if(totalCol > 0){actualBoardData["vertical"][i].push(totalCol);}
                 if(totalRow > 0){actualBoardData["horizontal"][i].push(totalRow);}
@@ -461,12 +495,13 @@ function _getBoardState(){
     return actualBoardData;
 }
 function _reset(){
-    _setNames();
+    
     generateHints();
     generateTable();
     generateCells();
     generateGuideLines();
     generateHover();
+    _setRawJSON();
 }
 </SCRIPT>
 </HTML>
