@@ -7,12 +7,15 @@
     body{
         background-color: #ffffff;
     }
-    #table{user-select: none;}
     .upperSection{
         display:inline-block;
+        text-align: center;
+        width: 100%;
     }
     #table{
-        display:flex
+        display:flex;
+        user-select: none;
+        width: 100%;
     }
 </STYLE>
 </HEAD>
@@ -20,15 +23,8 @@
     <div>
         <div class="upperSection">
             <h1 id="title"></h1>
-            <input type="radio" id="fill" name="action" value="fill" checked="true"/>
-            <label for="fill">Fill (press A or left click)</label><br>
-            <input type="radio" id="remove" name="action" value="remove"/>
-            <label for="remove">Remove (press S or right click)</label><br>
-            <input type="radio" id="placeholder" name="action" value="placeholder">
-            <label for="placeholder">Placeholder (press D or click mouse wheel)</label><br>
-            <label>...or Toggle with W</label><br>
-        </div>
-        <div class="upperSection">
+            <p id="instructions"><b>Left click</b> fills a square.</p>
+            <p><b>Right click</b> will toggle between empty-ing a square or marking it "as do not fill"</p>
         </div>
     </div>
     <div>
@@ -58,7 +54,12 @@
                 fill:rgb(14, 107, 37);
             }
             .exclude{
-                fill:rgb(52, 61, 54);
+                fill:rgb(200, 200, 200);
+            }
+            .exclude_symbol{
+                fill:none;
+                stroke:black;
+                stroke-width:3
             }
             .gridlines{
                 stroke:rgb(0,0,255);
@@ -76,6 +77,9 @@
                 .pencil_body        {fill: rgb(255,255,0);}
                 .pencil_eraser      {fill: #ff78f4;}
                 .pencil_eraser_metal{fill: #818181;}
+            }
+            .hidden{
+                display:none;
             }
         </style>
         <g class="hints">
@@ -110,31 +114,9 @@ CLASSNAMES={
     FILLED: "filled",
     IGNORE: "exclude"
 }
-DATA = /*REPLACE ME*/;
 ACTION = false;
+DATA = REPLACE ME;
 CURRENT_ACTION = CLASSNAMES.FILLED;
-$(document).on("keyup", function(e) {
-    if(e.originalEvent.key == 'a'){
-        $('#fill').prop('checked', true);
-    }
-    if(e.originalEvent.key == 'd'){
-        $('#placeholder').prop('checked', true);
-    }
-    if(e.originalEvent.key == 's'){
-        $('#remove').prop('checked', true);
-    }
-    if(e.originalEvent.key == 'w'){
-        if($('#fill').prop('checked')){
-            $('#remove').prop('checked', true);
-        }else if ($('#remove').prop('checked')){
-            $('#placeholder').prop('checked', true);
-        }else if ($('#placeholder').prop('checked')) {
-            $('#fill').prop('checked', true);
-        }else{
-            $('#fill').prop('checked', true);
-        }
-    }
-});
 document.addEventListener('contextmenu', event => event.preventDefault());
 $(document).ready(()=>{
     _reset();
@@ -248,18 +230,37 @@ function generateCells(){
         for(let c=0;c<DATA.size;c++){
             let x = c*DATA["view"]["baseSize"]+_getCornerOffset();
             let y = r*DATA["view"]["baseSize"]+_getCornerOffset();
-            let newCell = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+            let newGroup =  document.createElementNS("http://www.w3.org/2000/svg", 'g');
+            newGroup.setAttribute('transform','translate('+x+','+y+')');
+            let newCell = document.createElementNS("http://www.w3.org/2000/svg"  , 'rect');
             newCell.setAttribute('class'         ,'cell');
-            newCell.setAttribute('x'             ,x);
-            newCell.setAttribute('y'             ,y);
+            //newCell.setAttribute('x'             ,x);
+            //newCell.setAttribute('y'             ,y);
+            newCell.setAttribute('x'             ,0);
+            newCell.setAttribute('y'             ,0);
             newCell.setAttribute('width'         ,DATA["view"]["baseSize"]);
             newCell.setAttribute('height'        ,DATA["view"]["baseSize"]);
             newCell.setAttribute('pointer-events','visiblePainted');
-            $('.cells').append(newCell);
+
+            let newExcludeSymbol = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+            let symbolMin = 10
+            let symbolOffset = DATA["view"]["baseSize"] - symbolMin;
+            newExcludeSymbol.setAttribute('class','exclude_symbol hidden');
+            newExcludeSymbol.setAttribute('d',
+                'M '+symbolMin+' '+symbolMin+' '+
+                'L '+symbolOffset+' '+symbolOffset+' '+
+                'M '+symbolOffset+' '+symbolMin+' '+
+                'L '+symbolMin+' '+symbolOffset+' '+
+                'Z'
+            );
+            newGroup.append(newCell);
+            newGroup.append(newExcludeSymbol);
+            $('.cells').append(newGroup);
+            //TODO -- add in the exclude svg icon. we'll just front load them all and turn
+            // it on and off on click. easy. Peasy.
         }
     }
     _addEventsToCells();
- 
 }
 function generateGuideLines(){
     let divider    = parseInt(DATA.divider) || 2;
@@ -344,16 +345,17 @@ function updateHints(){
 function validateWin(){
     //updateHints();
     let board_state = _getBoardState();
-    if(JSON.stringify(board_state) === JSON.stringify(DATA["hints"])){
+    if(JSON.stringify(board_state) === JSON.stringify(DATA["hints"] || window.cheat)){
         if(DATA['view']['final']) {
-        $('.gridlines').empty();
-        let colors = DATA['view']['final'].split(';');
-        $(".cells").find('rect').each((idx,rect)=>{
-            rect.setAttribute('style','fill: rgb('+colors[idx]+')');
-        });
-       
+            $('.gridlines').empty();
+            let colors = DATA['view']['final'].split(';');
+            $(".cells").find('rect').each((idx,rect)=>{
+                rect.setAttribute('style','fill: rgb('+colors[idx]+')');
+            });
+            alert('You Won!');
+        }else{
+            alert('You Won!');
         }
-        alert('You Won!');
     }
 }
 // ----------
@@ -390,44 +392,56 @@ function _addEventsToCells(){
     });
     $(".cell").toArray().forEach(function(svgCell){
         svgCell.onmouseenter = (e)=>{
-            let x = e.target.attributes.x.value;
-            let y = e.target.attributes.y.value;
+            let coords = e.target.parentElement.attributes.transform.textContent
+            .replace('translate(','')
+            .replace(')','')
+            .split(',');
+            let x = coords[0];
+            let y = coords[1];
+            //let x = e.target.attributes.x.value;
+            //let y = e.target.attributes.y.value;
             $('#hover').attr('transform','translate('+x+' '+y+')');
+            if(ACTION){
+                if(CURRENT_ACTION == CLASSNAMES.IGNORE){
+                    $(e.target.parentElement).find('.exclude_symbol').removeClass('hidden');
+                }else{
+                    $(e.target.parentElement).find('.exclude_symbol').addClass('hidden');
+                }
+            }
             _cellAction(e);
         }
         svgCell.onmouseleave = (e)=>{
             $('#hover').attr('transform','translate(-'+DATA["view"]["baseSize"]+' -'+DATA["view"]["baseSize"]+')');
         }
         svgCell.onmousedown = (e)=>{
+            
             switch (event.which) {
                 case 1:{
-                    //Determine Primary Action
-                    if($('input[name=action]:checked').val() == "fill"){
-                        CURRENT_ACTION = CLASSNAMES.FILLED;
-                    }else if($('input[name=action]:checked').val() == "placeholder"){
-                        CURRENT_ACTION = CLASSNAMES.IGNORE;
-                    }else if($('input[name=action]:checked').val() == "remove"){
-                        CURRENT_ACTION = CLASSNAMES.EMPTY;
-                    }
+                    // Left Click
+                    CURRENT_ACTION = CLASSNAMES.FILLED;
+                    $(e.target.parentElement).find('.exclude_symbol').addClass('hidden');
                 }
                 break;
                 case 2:{
+                    // Middle Mouse Click
                     CURRENT_ACTION = CLASSNAMES.IGNORE;
+                    $(e.target.parentElement).find('.exclude_symbol').removeClass('hidden');
                 }
                 break;
                 case 3:{
-                    CURRENT_ACTION = CLASSNAMES.EMPTY;
+                    // Right click
+                    currentClasses = e.toElement.className.baseVal;
+                    if(currentClasses.indexOf(CLASSNAMES.FILLED) > -1 || currentClasses.indexOf(CLASSNAMES.IGNORE) > -1){
+                        CURRENT_ACTION = CLASSNAMES.EMPTY;
+                        $(e.target.parentElement).find('.exclude_symbol').addClass('hidden');
+                    }else{
+                        CURRENT_ACTION = CLASSNAMES.IGNORE;
+                        $(e.target.parentElement).find('.exclude_symbol').removeClass('hidden');
+                    }
                 }
                 break;
                 default:{
-                    //Determine Primary Action
-                    if($('input[name=action]:checked').val() == "fill"){
-                        CURRENT_ACTION = CLASSNAMES.FILLED;
-                    }else if($('input[name=action]:checked').val() == "placeholder"){
-                        CURRENT_ACTION = CLASSNAMES.IGNORE;
-                    }else if($('input[name=action]:checked').val() == "remove"){
-                        CURRENT_ACTION = CLASSNAMES.EMPTY;
-                    }
+                    CURRENT_ACTION = CLASSNAMES.FILLED;
                 }
             }
             ACTION = true;

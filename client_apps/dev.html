@@ -114,8 +114,8 @@ CLASSNAMES={
     FILLED: "filled",
     IGNORE: "exclude"
 }
-DATA = {"name": "test", "size": 10, "divider": 2, "hints": {"vertical": [[1], [2], [7], [7], [8], [8], [7], [7], [2], [1]], "horizontal": [[2], [2], [4], [6], [10], [8], [6], [6], [2, 2], [1, 1]]}, "view": {"baseSize": 50, "final": "0,0,0;0,0,0;0,0,0;0,0,0;255,244,0;255,244,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;255,244,0;255,244,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;255,244,0;255,244,0;255,244,0;255,244,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;255,244,0;255,244,0;255,244,0;255,244,0;255,244,0;255,244,0;0,0,0;0,0,0;255,244,0;255,244,0;255,244,0;0,0,0;255,244,0;255,244,0;0,0,0;255,244,0;255,244,0;255,244,0;0,0,0;255,244,0;255,244,0;0,0,0;255,244,0;255,244,0;0,0,0;255,244,0;255,244,0;0,0,0;0,0,0;0,0,0;255,244,0;255,244,0;255,244,0;255,244,0;255,244,0;255,244,0;0,0,0;0,0,0;0,0,0;0,0,0;255,244,0;255,244,0;255,244,0;255,244,0;255,244,0;255,244,0;0,0,0;0,0,0;0,0,0;0,0,0;255,244,0;255,244,0;0,0,0;0,0,0;255,244,0;255,244,0;0,0,0;0,0,0;0,0,0;0,0,0;255,244,0;0,0,0;0,0,0;0,0,0;0,0,0;255,244,0;0,0,0;0,0,0;"}};
 ACTION = false;
+DATA = REPLACE ME;
 CURRENT_ACTION = CLASSNAMES.FILLED;
 document.addEventListener('contextmenu', event => event.preventDefault());
 $(document).ready(()=>{
@@ -345,16 +345,17 @@ function updateHints(){
 function validateWin(){
     //updateHints();
     let board_state = _getBoardState();
-    if(JSON.stringify(board_state) === JSON.stringify(DATA["hints"])){
+    if(JSON.stringify(board_state) === JSON.stringify(DATA["hints"]) || window.cheat){
         if(DATA['view']['final']) {
-        $('.gridlines').empty();
-        let colors = DATA['view']['final'].split(';');
-        $(".cells").find('rect').each((idx,rect)=>{
-            rect.setAttribute('style','fill: rgb('+colors[idx]+')');
-        });
-       
+            $('.gridlines').empty();
+            let colors = DATA['view']['final'].split(';');
+            $(".cells").find('rect').each((idx,rect)=>{
+                rect.setAttribute('style','fill: rgb('+colors[idx]+')');
+            });
+            alert('You Won!');
+        }else{
+            alert('You Won!');
         }
-        alert('You Won!');
     }
 }
 // ----------

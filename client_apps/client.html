@@ -345,16 +345,17 @@ function updateHints(){
 function validateWin(){
     //updateHints();
     let board_state = _getBoardState();
-    if(JSON.stringify(board_state) === JSON.stringify(DATA["hints"])){
+    if(JSON.stringify(board_state) === JSON.stringify(DATA["hints"]) || window.cheat){
         if(DATA['view']['final']) {
-        $('.gridlines').empty();
-        let colors = DATA['view']['final'].split(';');
-        $(".cells").find('rect').each((idx,rect)=>{
-            rect.setAttribute('style','fill: rgb('+colors[idx]+')');
-        });
-       
+            $('.gridlines').empty();
+            let colors = DATA['view']['final'].split(';');
+            $(".cells").find('rect').each((idx,rect)=>{
+                rect.setAttribute('style','fill: rgb('+colors[idx]+')');
+            });
+            alert('You Won!');
+        }else{
+            alert('You Won!');
         }
-        alert('You Won!');
     }
 }
 // ----------
