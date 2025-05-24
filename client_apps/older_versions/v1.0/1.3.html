@@ -120,7 +120,7 @@ CLASSNAMES={
 }
 ACTION = false;
 ISMOBILE = window.orientation > -1;
-DATA = {"name": "test", "size": 10, "divider": 2, "hints": {"vertical": [[0], [0], [0], [0], [2], [2], [0], [0], [0], [0]], "horizontal": [[0], [0], [0], [0], [2], [2], [0], [0], [0], [0]]}, "view": {"baseSize": 50, "final": "0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;255,255,255;255,255,255;255,255,255;255,255,255;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;255,255,255;255,255,255;0,0,0;0,0,0;0,0,0;255,255,255;255,255,255;0,0,0;0,0,0;255,255,255;255,255,255;0,0,0;255,255,255;0,0,0;255,255,255;0,0,0;255,255,255;255,255,255;0,0,0;255,255,255;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;255,255,255;0,0,0;255,255,255;0,0,0;0,0,0;255,255,255;0,0,0;255,255,255;0,0,0;255,255,255;255,255,255;0,0,0;0,0,0;255,255,255;0,0,0;0,0,0;255,255,255;0,0,0;0,0,0;255,255,255;0,0,0;0,0,0;0,0,0;0,0,0;255,255,255;255,255,255;0,0,0;0,0,0;0,0,0;255,255,255;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;255,255,255;255,255,255;255,255,255;255,255,255;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;0,0,0;"}};
+DATA = REPLACE ME;
 CURRENT_ACTION = CLASSNAMES.FILLED;
 document.addEventListener('contextmenu', event => event.preventDefault());
 $(document).ready(()=>{
@@ -148,10 +148,6 @@ $("#divideBy").change((e)=>{
 //
 // ----------
 function generateHover(){
-    if(ISMOBILE){
-        if($("#hover")){$("#hover").remove();}
-        return;
-    }
     // resize the hover cell itself
     let hoverCell     = $(".hover_cell")[0];
     let hoverCellSize = DATA["view"]["baseSize"]; //TODO we gunna make this variable
@@ -358,6 +354,9 @@ function validateWin(){
         if(DATA['view']['final']) {
             $('.gridlines').empty();
             let colors = DATA['view']['final'].split(';');
+            $(".exclude_symbol").each((idx,placeholder)=>{
+                placeholder.className += ' hidden';
+            });
             $(".cells").find('rect').each((idx,rect)=>{
                 rect.setAttribute('style','fill: rgb('+colors[idx]+')');
             });
@@ -400,81 +399,67 @@ function _addEventsToCells(){
         }
     });
     $(".cell").toArray().forEach(function(svgCell){
-        if(ISMOBILE){
-            svgCell.onmousedown = (e)=>{
-                currentClasses = e.toElement.className.baseVal;
-                CURRENT_ACTION = currentClasses.indexOf(CLASSNAMES.FILLED) > -1 ? CLASSNAMES.EMPTY : CLASSNAMES.FILLED;
-                ACTION = true;
-                _cellAction(e);
-            }
-            svgCell.onmouseenter = (e)=>{
-                _cellAction(e);
-            }
-            svgCell.onmouseup = (e)=>{
-                ACTION = false;
-                validateWin();
-            }
-        }else{
-            svgCell.onmouseenter = (e)=>{
-                let coords = e.target.parentElement.attributes.transform.textContent
-                .replace('translate(','')
-                .replace(')','')
-                .split(',');
-                let x = coords[0];
-                let y = coords[1];
-                //let x = e.target.attributes.x.value;
-                //let y = e.target.attributes.y.value;
-                $('#hover').attr('transform','translate('+x+' '+y+')');
-                if(ACTION){
-                    if(CURRENT_ACTION == CLASSNAMES.IGNORE){
-                        $(e.target.parentElement).find('.exclude_symbol').removeClass('hidden');
-                    }else{
-                        $(e.target.parentElement).find('.exclude_symbol').addClass('hidden');
-                    }
+        svgCell.onmouseenter = (e)=>{
+            let coords = e.target.parentElement.attributes.transform.textContent
+            .replace('translate(','')
+            .replace(')','')
+            .split(',');
+            let x = coords[0];
+            let y = coords[1];
+            //let x = e.target.attributes.x.value;
+            //let y = e.target.attributes.y.value;
+            $('#hover').attr('transform','translate('+x+' '+y+')');
+            /*if(ACTION){
+                if(CURRENT_ACTION == CLASSNAMES.IGNORE){
+                    $(e.target.parentElement).find('.exclude_symbol').removeClass('hidden');
+                }else{
+                    $(e.target.parentElement).find('.exclude_symbol').addClass('hidden');
                 }
+            }*/
+            if(CURRENT_ACTION != CLASSNAMES.IGNORE){
                 _cellAction(e);
             }
-            svgCell.onmouseleave = (e)=>{
-                $('#hover').attr('transform','translate(-'+DATA["view"]["baseSize"]+' -'+DATA["view"]["baseSize"]+')');
-            }
-            svgCell.onmousedown = (e)=>{
-                
-                switch (event.which) {
-                    case 1:{
-                        // Left Click
-                        CURRENT_ACTION = CLASSNAMES.FILLED;
+        }
+        svgCell.onmouseleave = (e)=>{
+            $('#hover').attr('transform','translate(-'+DATA["view"]["baseSize"]+' -'+DATA["view"]["baseSize"]+')');
+        }
+        svgCell.onmousedown = (e)=>{
+            
+            switch (event.which) {
+                case 1:{
+                    // Left Click
+                    CURRENT_ACTION = CLASSNAMES.FILLED;
+                    $(e.target.parentElement).find('.exclude_symbol').addClass('hidden');
+                }
+                break;
+                case 2:{
+                    // Middle Mouse Click
+                    CURRENT_ACTION = CLASSNAMES.IGNORE;
+                    $(e.target.parentElement).find('.exclude_symbol').removeClass('hidden');
+                }
+                break;
+                case 3:{
+                    // Right click
+                    currentClasses = e.toElement.className.baseVal;
+                    if(currentClasses.indexOf(CLASSNAMES.FILLED) > -1 || currentClasses.indexOf(CLASSNAMES.IGNORE) > -1){
+                        CURRENT_ACTION = CLASSNAMES.EMPTY;
                         $(e.target.parentElement).find('.exclude_symbol').addClass('hidden');
-                    }
-                    break;
-                    case 2:{
-                        // Middle Mouse Click
+                    }else{
                         CURRENT_ACTION = CLASSNAMES.IGNORE;
                         $(e.target.parentElement).find('.exclude_symbol').removeClass('hidden');
                     }
-                    break;
-                    case 3:{
-                        // Right click
-                        currentClasses = e.toElement.className.baseVal;
-                        if(currentClasses.indexOf(CLASSNAMES.FILLED) > -1 || currentClasses.indexOf(CLASSNAMES.IGNORE) > -1){
-                            CURRENT_ACTION = CLASSNAMES.EMPTY;
-                            $(e.target.parentElement).find('.exclude_symbol').addClass('hidden');
-                        }else{
-                            CURRENT_ACTION = CLASSNAMES.IGNORE;
-                            $(e.target.parentElement).find('.exclude_symbol').removeClass('hidden');
-                        }
-                    }
-                    break;
-                    default:{
-                        CURRENT_ACTION = CLASSNAMES.FILLED;
-                    }
                 }
-                ACTION = true;
-                _cellAction(e);
+                break;
+                default:{
+                    CURRENT_ACTION = CLASSNAMES.FILLED;
+                }
             }
-            svgCell.onmouseup = (e)=>{
-                ACTION = false;
-                validateWin();
-            }
+            ACTION = true;
+            _cellAction(e);
+        }
+        svgCell.onmouseup = (e)=>{
+            ACTION = false;
+            validateWin();
         }
     });
     $(".hint").toArray().forEach(function(svgHint){

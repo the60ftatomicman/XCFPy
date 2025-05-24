@@ -354,6 +354,9 @@ function validateWin(){
         if(DATA['view']['final']) {
             $('.gridlines').empty();
             let colors = DATA['view']['final'].split(';');
+            $(".exclude_symbol").each((idx,placeholder)=>{
+                placeholder.className += ' hidden';
+            });
             $(".cells").find('rect').each((idx,rect)=>{
                 rect.setAttribute('style','fill: rgb('+colors[idx]+')');
             });
@@ -406,14 +409,16 @@ function _addEventsToCells(){
             //let x = e.target.attributes.x.value;
             //let y = e.target.attributes.y.value;
             $('#hover').attr('transform','translate('+x+' '+y+')');
-            if(ACTION){
+            /*if(ACTION){
                 if(CURRENT_ACTION == CLASSNAMES.IGNORE){
                     $(e.target.parentElement).find('.exclude_symbol').removeClass('hidden');
                 }else{
                     $(e.target.parentElement).find('.exclude_symbol').addClass('hidden');
                 }
+            }*/
+            if(CURRENT_ACTION != CLASSNAMES.IGNORE){
+                _cellAction(e);
             }
-            _cellAction(e);
         }
         svgCell.onmouseleave = (e)=>{
             $('#hover').attr('transform','translate(-'+DATA["view"]["baseSize"]+' -'+DATA["view"]["baseSize"]+')');
