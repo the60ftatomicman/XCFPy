@@ -3,9 +3,11 @@
 <HEAD>
 <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
 <TITLE></TITLE>
+<meta name="viewport" content= "width=device-width, user-scalable=no">
 <STYLE>
     body{
         background-color: #ffffff;
+        overflow-x:hidden;
     }
     .upperSection{
         display:inline-block;
@@ -16,6 +18,8 @@
         display:flex;
         user-select: none;
         width: 100%;
+        overflow-x:hidden;
+        overflow-y:hidden;
     }
 </STYLE>
 </HEAD>
@@ -115,6 +119,7 @@ CLASSNAMES={
     IGNORE: "exclude"
 }
 ACTION = false;
+ISMOBILE = window.orientation > -1;
 DATA = REPLACE ME;
 CURRENT_ACTION = CLASSNAMES.FILLED;
 document.addEventListener('contextmenu', event => event.preventDefault());
